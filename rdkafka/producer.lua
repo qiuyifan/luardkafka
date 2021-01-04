@@ -5,6 +5,7 @@ local KafkaTopic = require 'rdkafka.topic'
 local ffi = require 'ffi'
 
 local DEFAULT_DESTROY_TIMEOUT_MS = 3000
+local DEFAULT_POLL = 100
 
 local KafkaProducer = {}
 KafkaProducer.__index = KafkaProducer
@@ -146,7 +147,7 @@ end
 
 function KafkaProducer:poll(timeout_ms)
     assert(self.kafka_ ~= nil)
-    return librdkafka.rd_kafka_poll(self.kafka_, timeout_ms)
+    return librdkafka.rd_kafka_poll(self.kafka_, timeout_ms or DEFAULT_POLL)
 end
 jit.off(KafkaProducer.poll)
 
@@ -167,5 +168,14 @@ end
 function KafkaProducer.thread_cnt()
     return librdkafka.rd_kafka_thread_cnt()
 end
+
+function KafkaProducer:flush(timeout_ms)
+    assert(self.kafka_ ~= nil)
+    local result = librdkafka.rd_kafka_flush(self.kafka_, timeout_ms or DEFAULT_POLL)
+    if result ~= librdkafka.RD_KAFKA_RESP_ERR_NO_ERROR then
+        error(ffi.string(librdkafka.rd_kafka_err2str(result)))
+    end
+end
+jit.off(KafkaProducer.flush)
 
 return KafkaProducer
