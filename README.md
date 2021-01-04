@@ -15,7 +15,7 @@ Description
 
 This Lua library is a Kafka client driver for luajit:  
 fork and changed from https://github.com/mistsv/luardkafka  
-and simple consumer support
+add simple consumer support
 
 test on https://github.com/edenhill/librdkafka (version 1.6.0-PRE4)
 
@@ -23,7 +23,7 @@ use for openresty https://github.com/openresty/lua-nginx-module
 
 Author
 ======
-qiuyifan(531987772@qq.com) based on mistsv
+qiuyifan(531987772@qq.com) based on mistsv  
 
 See Also
 ======
